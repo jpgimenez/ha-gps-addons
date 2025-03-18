@@ -1,4 +1,4 @@
 # https://developers.home-assistant.io/docs/add-ons/repository#repository-configuration
-name: Stians Home Assistant Repository
-url: 'https://github.com/corvy/ha-addons'
-maintainer: Stian B. Barmen <stian@barmen.nu>
+name: Juan Pablo Giménez Home Assistant GPS addons repository
+url: 'https://github.com/jpgimenez/ha-gps-addons'
+maintainer: Juan Pablo Giménez <jpg@rosario.com>
