@@ -1,0 +1,42 @@
+name: "GPSD to Traccar"
+description: >-
+  This addon will run GPSD and serve the data to Traccar and show a device tracker device (device_tracker.gpsd_location). The addon uses Mosquitto Traccar but can also be configued to another broker if wanted. 
+  Remember to install Mosquitto or another broker before setting up this addon.
+
+  Installation requires you to set up a username and password to publish to Traccar. Also you must select the serial device for GPSD in configuration.
+url: https://github.com/jpgimenez/ha-gps-addons/tree/main/gpsd2traccar
+version: "2025.3.0"
+slug: "gpsd2traccar"
+codenotary: "jpg@rosario.com"
+init: false
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+options:
+  device: null
+  publish_3d_fix_only: true
+schema:
+  device: device(subsystem=tty)
+  baudrate: int?
+  charsize: int?
+  parity: bool?
+  stopbit: int?
+  charsize: int?
+  parity: bool?
+  stopbit: int?
+  publish_3d_fix_only: bool?
+  min_n_satellites: int?
+  publish_interval: int?
+  summary_interval: int?
+  traccar_url: str?
+  traccar_deviceid: str?
+  gpsd_options: str?
+  debug: bool?
+ports:
+  2947/tcp: null
+devices:
+  - /dev/pps0
+image: ghcr.io/jpgimenez/{arch}-addon-gpsd2traccar
