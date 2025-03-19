@@ -13,34 +13,41 @@ STOPBIT=$(bashio::config 'stopbit' 1)
 CONTROL="clocal"
 TRACCAR_URL=$(bashio::config 'traccar_url')
 TRACCAR_DEVICEID=$(bashio::config 'traccar_deviceid')
+GPSD_HOST=$(bashio::config 'gpsd_host')
+GPSD_PORT=$(bashio::config 'gpsd_port')
 HA_AUTH=false
 
-# stty expects -parenb to disable parity
-if [ "$PARITY" = false ]; then
-  PARITY_CL="-parenb"
-elif [ "$PARITY" = true ]; then
-  PARITY_CL="parenb"
+if [ -z "$GPS_HOST" ]; then
+  # stty expects -parenb to disable parity
+  if [ "$PARITY" = false ]; then
+    PARITY_CL="-parenb"
+  elif [ "$PARITY" = true ]; then
+    PARITY_CL="parenb"
+  fi
+
+  # stty expects -cstopb to set 1 stop bit per character, cstopb for 2
+  if [ "$STOPBIT" -eq 1 ]; then
+    STOPBIT_CL="-cstopb"
+  elif [ "$STOPBIT" -eq 2 ]; then
+    STOPBIT_CL="cstopb"
+  fi
+
+
+  # Serial setup
+  #
+  # For serial interfaces, options such as low_latency are recommended
+  # Also, http://catb.org/gpsd/upstream-bugs.html#tiocmwait recommends
+  #   setting the baudrate with stty
+  # Uncomment the following lines if using a serial device:
+  #
+
+  echo "Setting up serial device with the following: ${DEVICE} ${BAUDRATE} cs${CHARSIZE} ${STOPBIT_CL} ${PARITY_CL} ${CONTROL}"
+  /bin/stty -F ${DEVICE} raw ${BAUDRATE} cs${CHARSIZE} ${PARITY_CL} ${CONTROL} ${STOPBIT_CL}
+  # /bin/setserial ${DEVICE} low_latency
+else
+  echo "Setting up network device with the following: ${DEVICE} ${GPSD_HOST} ${GPSD_PORT}"
+  DEVICE="gpsd://${GPSD_HOST}:${GPSD_PORT}"
 fi
-
-# stty expects -cstopb to set 1 stop bit per character, cstopb for 2
-if [ "$STOPBIT" -eq 1 ]; then
-  STOPBIT_CL="-cstopb"
-elif [ "$STOPBIT" -eq 2 ]; then
-  STOPBIT_CL="cstopb"
-fi
-
-
-# Serial setup
-#
-# For serial interfaces, options such as low_latency are recommended
-# Also, http://catb.org/gpsd/upstream-bugs.html#tiocmwait recommends
-#   setting the baudrate with stty
-# Uncomment the following lines if using a serial device:
-#
-
-echo "Setting up serial device with the following: ${DEVICE} ${BAUDRATE} cs${CHARSIZE} ${STOPBIT_CL} ${PARITY_CL} ${CONTROL}"
-/bin/stty -F ${DEVICE} raw ${BAUDRATE} cs${CHARSIZE} ${PARITY_CL} ${CONTROL} ${STOPBIT_CL}
-# /bin/setserial ${DEVICE} low_latency
 
 # Config file for gpsd server
 #usage: gpsd [OPTIONS] device...

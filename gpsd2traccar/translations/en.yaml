@@ -21,6 +21,12 @@ configuration:
   gpsd_options:
     name: GPSD options
     description: Add aditional settings you want to pass to GPSD, could be "-D3 -N" for example for debugging in logs
+  gpsd_host:
+    name: GPSD host
+    description: Hostname or IP address of the GPSD server, if you want to connect to a remote GPSD server.
+  gpsd_port:
+    name: GPSD port
+    description: Port of the GPSD server, if you want to connect to a remote GPSD server.
   baudrate:
     name: Baudrate
     description: Serial device baudrate, defaults to 9600
