@@ -1,9 +1,8 @@
 name: "GPSD to Traccar"
 description: >-
-  This addon will run GPSD and serve the data to Traccar and show a device tracker device (device_tracker.gpsd_location). The addon uses Mosquitto Traccar but can also be configued to another broker if wanted. 
-  Remember to install Mosquitto or another broker before setting up this addon.
+  This addon will run GPSD and serve the data to Traccar.
 
-  Installation requires you to set up a username and password to publish to Traccar. Also you must select the serial device for GPSD in configuration.
+  You must select the serial device for GPSD in configuration.
 url: https://github.com/jpgimenez/ha-gps-addons/tree/main/gpsd2traccar
 version: "2025.3.0"
 slug: "gpsd2traccar"
