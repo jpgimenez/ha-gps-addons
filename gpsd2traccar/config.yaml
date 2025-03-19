@@ -4,7 +4,7 @@ description: >-
 
   You must select the serial device for GPSD in configuration.
 url: https://github.com/jpgimenez/ha-gps-addons/tree/main/gpsd2traccar
-version: "2025.3.2"
+version: "2025.3.3"
 slug: "gpsd2traccar"
 codenotary: "jpg@rosario.com"
 init: false
