@@ -70,7 +70,7 @@ echo "Starting GPSD with device \"${DEVICE}\"..."
 #/usr/bin/gpsctl
 
 gpspipe -r | while read line; do
-  curl -G "$TRACCAR_URL" \
+  curl --silent --get "$TRACCAR_URL" \
        --data-urlencode "id=$TRACCAR_DEVICEID" \
        --data-urlencode "nmea=$line"
 done
