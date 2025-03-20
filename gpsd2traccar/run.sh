@@ -64,6 +64,8 @@ else
   DEVICE="gpsd://${GPSD_HOST}:${GPSD_PORT}"
 fi
 
+GPSD_OPTIONS="${GPSD_OPTIONS} -s ${BAUDRATE} ${DEVICE}"
+
 # Config file for gpsd server
 #usage: gpsd [OPTIONS] device...
 #
@@ -86,7 +88,7 @@ fi
 
 echo "Starting GPSD with device \"${DEVICE}\"..."
 /usr/sbin/gpsd --version
-/usr/sbin/gpsd ${GPSD_OPTIONS} -s ${BAUDRATE} ${DEVICE}
+/usr/sbin/gpsd ${GPSD_OPTIONS}
 
 #echo "Checking device settings"
 #/usr/bin/gpsctl
