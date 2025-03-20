@@ -30,9 +30,9 @@ echo "GPSD Host: ${GPSD_HOST}"
 echo "GPSD Port: ${GPSD_PORT}"
 
 # Check if the device is a serial device or a network device
-# If the GPS_HOST is set, then it is a network device
-# If the GPS_HOST is not set, then it is a serial device
-if [ -z "$GPS_HOST" ]; then
+# If the GPSD_HOST is set, then it is a network device
+# If the GPSD_HOST is not set, then it is a serial device
+if [ -z "$GPSD_HOST" ]; then
   # stty expects -parenb to disable parity
   if [ "$PARITY" = false ]; then
     PARITY_CL="-parenb"
