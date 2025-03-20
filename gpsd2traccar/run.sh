@@ -17,6 +17,21 @@ GPSD_HOST=$(bashio::config 'gpsd_host')
 GPSD_PORT=$(bashio::config 'gpsd_port')
 HA_AUTH=false
 
+echo "Device: ${DEVICE}"
+echo "Baudrate: ${BAUDRATE}"
+echo "GPSD Options: ${GPSD_OPTIONS}"
+echo "Charsize: ${CHARSIZE}"
+echo "Parity: ${PARITY}"
+echo "Stopbit: ${STOPBIT}"
+echo "Control: ${CONTROL}"
+echo "Traccar URL: ${TRACCAR_URL}"
+echo "Traccar Device ID: ${TRACCAR_DEVICEID}"
+echo "GPSD Host: ${GPSD_HOST}"
+echo "GPSD Port: ${GPSD_PORT}"
+
+# Check if the device is a serial device or a network device
+# If the GPS_HOST is set, then it is a network device
+# If the GPS_HOST is not set, then it is a serial device
 if [ -z "$GPS_HOST" ]; then
   # stty expects -parenb to disable parity
   if [ "$PARITY" = false ]; then
