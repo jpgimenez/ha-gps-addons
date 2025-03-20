@@ -15,19 +15,22 @@ TRACCAR_URL=$(bashio::config 'traccar_url')
 TRACCAR_DEVICEID=$(bashio::config 'traccar_deviceid')
 GPSD_HOST=$(bashio::config 'gpsd_host')
 GPSD_PORT=$(bashio::config 'gpsd_port')
+DEBUG=$(bashio::config 'debug' false)
 HA_AUTH=false
 
-echo "Device: ${DEVICE}"
-echo "Baudrate: ${BAUDRATE}"
-echo "GPSD Options: ${GPSD_OPTIONS}"
-echo "Charsize: ${CHARSIZE}"
-echo "Parity: ${PARITY}"
-echo "Stopbit: ${STOPBIT}"
-echo "Control: ${CONTROL}"
-echo "Traccar URL: ${TRACCAR_URL}"
-echo "Traccar Device ID: ${TRACCAR_DEVICEID}"
-echo "GPSD Host: ${GPSD_HOST}"
-echo "GPSD Port: ${GPSD_PORT}"
+if [ DEBUG = true ]; then
+  echo "Device: ${DEVICE}"
+  echo "Baudrate: ${BAUDRATE}"
+  echo "GPSD Options: ${GPSD_OPTIONS}"
+  echo "Charsize: ${CHARSIZE}"
+  echo "Parity: ${PARITY}"
+  echo "Stopbit: ${STOPBIT}"
+  echo "Control: ${CONTROL}"
+  echo "Traccar URL: ${TRACCAR_URL}"
+  echo "Traccar Device ID: ${TRACCAR_DEVICEID}"
+  echo "GPSD Host: ${GPSD_HOST}"
+  echo "GPSD Port: ${GPSD_PORT}"
+fi
 
 # Check if the device is a serial device or a network device
 # If the GPSD_HOST is set, then it is a network device
@@ -59,12 +62,12 @@ if [ -z "$GPSD_HOST" ]; then
   echo "Setting up serial device with the following: ${DEVICE} ${BAUDRATE} cs${CHARSIZE} ${STOPBIT_CL} ${PARITY_CL} ${CONTROL}"
   /bin/stty -F ${DEVICE} raw ${BAUDRATE} cs${CHARSIZE} ${PARITY_CL} ${CONTROL} ${STOPBIT_CL}
   # /bin/setserial ${DEVICE} low_latency
+  GPSD_OPTIONS="${GPSD_OPTIONS} -s ${BAUDRATE} ${DEVICE}"
 else
   echo "Setting up network device with the following: ${DEVICE} ${GPSD_HOST} ${GPSD_PORT}"
   DEVICE="gpsd://${GPSD_HOST}:${GPSD_PORT}"
+  GPSD_OPTIONS="${DEVICE}"
 fi
-
-GPSD_OPTIONS="${GPSD_OPTIONS} -s ${BAUDRATE} ${DEVICE}"
 
 # Config file for gpsd server
 #usage: gpsd [OPTIONS] device...
@@ -94,6 +97,9 @@ echo "Starting GPSD with device \"${DEVICE}\"..."
 #/usr/bin/gpsctl
 
 gpspipe -r | while read line; do
+  if [ "$DEBUG" = true ]; then
+    echo "Sending NMEA: $line"
+  fi
   curl --silent --get "$TRACCAR_URL" \
        --data-urlencode "id=$TRACCAR_DEVICEID" \
        --data-urlencode "nmea=$line"
